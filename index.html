@@ -50,12 +50,27 @@
             background-color: #fefce8; /* Дуже світлий жовтий */
             border: 1px solid #fde68a; /* Світло-жовта рамка */
             color: #4b5563; /* Темно-сірий текст */
+            /* НОВІ СТИЛІ: Приховуємо стандартний outline і додаємо активний стан */
+            outline: none;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Легка тінь */
         }
         .option-btn:hover {
             background-color: #fef9c3; /* Трохи темніший жовтий при наведенні */
             border-color: #FACC15; /* Основний жовтий */
             color: #713f12; /* Темно-коричневий для контрасту */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* Більша тінь при наведенні */
         }
+        /* СТИЛЬ ПРИ НАТИСКАННІ/АКТИВАЦІЇ */
+        .option-btn:active {
+            background-color: #fef3c7; /* Темніший жовтий */
+            transform: translateY(1px); /* Ефект натискання */
+            box-shadow: none; /* Прибираємо тінь */
+        }
+        /* ВАЖЛИВО: Забезпечуємо, щоб після натискання на мобільних пристроях не було фіксованого жовтого кільця */
+        .option-btn:focus:not(:focus-visible) {
+            outline: none;
+        }
+
         .progress-bar-bg {
             background-color: #fde68a; /* Світло-жовтий фон прогрес-бару */
             border-radius: 9999px;
@@ -108,7 +123,7 @@
         </div>
 
         <!-- Екран результату --><div id="result-screen" class="hidden text-center fade-in">
-            <!-- Логотип Rankova Studio на екрані результату --><img src="https://github.com/max-vorozhko/rankova_quiz/blob/ad2fb4e0f75e860e111c258c61d32150d0eb5/Rankova%20logo.png?raw=true" 
+            <!-- Логотип Rankova Studio на екрані результату --><img src="https://github.com/max-vorozhko/rankova_quiz/blob/main/Rankova%20logo.png?raw=true" 
                  alt="Rankova Studio Logo" class="h-12 mx-auto mb-4"
                  onerror="this.onerror=null; this.src='https://placehold.co/120x50/FACC15/262626?text=Rankova+Logo';">
             <!-- Кінець Логотипу --><p class="text-lg text-gray-600 mb-4">Твій ідеальний інструмент...</p>
@@ -267,7 +282,8 @@
                 const button = document.createElement('button');
                 button.textContent = option.text;
                 // Додавання адаптивних класів та стилів
-                button.classList.add('btn', 'option-btn', 'w-full', 'text-left', 'p-4', 'font-semibold', 'text-base', 'hover:shadow-lg', 'focus:outline-none', 'focus:ring-2', 'focus:ring-yellow-500'); /* Колір фокусу */
+                button.classList.add('btn', 'option-btn', 'w-full', 'text-left', 'p-4', 'font-semibold', 'text-base', 'hover:shadow-lg');
+                // ВИДАЛЕНО 'focus:outline-none', 'focus:ring-2', 'focus:ring-yellow-500' з класу кнопки
                 button.onclick = () => selectOption(option.scores);
                 optionsContainer.appendChild(button);
             });
