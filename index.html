@@ -4,16 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Який твій музичний інструмент? | Rankova Studio</title>
-    <!-- Використовуємо Tailwind CSS для стилізації -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Підключаємо шрифт Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Використовуємо Tailwind CSS для стилізації --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Підключаємо шрифт Montserrat --><link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f0f4f8; /* Світло-блакитний фон */
+            background-color: #fcf8e3; /* Дуже світло-жовтий фон для гармонії */
         }
         .quiz-container {
             background: white;
@@ -26,33 +24,53 @@
             border-radius: 0.75rem; /* Більш заокруглені кути */
         }
         .btn-primary {
-            background-color: #3b82f6; /* Синій */
-            color: white;
+            /* Основний жовтий, схожий на наданий зразок */
+            background-color: #FACC15; /* Tailwind yellow-400 */
+            color: #262626; /* Темно-сірий текст для контрасту */
+            font-weight: 700; /* Жирний текст */
         }
         .btn-primary:hover {
-            background-color: #2563eb;
+            background-color: #EAB308; /* Tailwind yellow-500 */
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        /* Кнопка "Записатись на урок" буде використовувати той же стиль, що й btn-primary */
+        .btn-secondary {
+            background-color: #FACC15; /* Tailwind yellow-400 */
+            color: #262626; /* Темно-сірий текст для контрасту */
+            font-weight: 700; /* Жирний текст */
+        }
+        .btn-secondary:hover {
+            background-color: #EAB308; /* Tailwind yellow-500 */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
         .option-btn {
-            background-color: #f9fafb; /* Дуже світло-сірий */
-            border: 1px solid #e5e7eb; /* Світло-сіра рамка */
-            color: #374151; /* Темно-сірий текст */
+            background-color: #fefce8; /* Дуже світлий жовтий */
+            border: 1px solid #fde68a; /* Світло-жовта рамка */
+            color: #4b5563; /* Темно-сірий текст */
         }
         .option-btn:hover {
-            background-color: #eff6ff; /* Світло-блакитний при наведенні */
-            border-color: #3b82f6;
-            color: #1e40af;
+            background-color: #fef9c3; /* Трохи темніший жовтий при наведенні */
+            border-color: #FACC15; /* Основний жовтий */
+            color: #713f12; /* Темно-коричневий для контрасту */
         }
         .progress-bar-bg {
-            background-color: #e5e7eb;
+            background-color: #fde68a; /* Світло-жовтий фон прогрес-бару */
             border-radius: 9999px;
             overflow: hidden;
         }
         .progress-bar-fg {
-            background-color: #3b82f6;
+            background-color: #FACC15; /* Основний жовтий прогрес-бар */
             transition: width 0.4s ease;
         }
+        
+        /* Колір заголовку результату */
+        #result-instrument {
+            color: #D97706; /* Темно-оранжевий для контрасту з жовтим фоном */
+        }
+
         /* Анімація появи елементів */
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -67,16 +85,17 @@
 
     <div id="quiz-container" class="quiz-container w-full max-w-2xl p-6 md:p-10">
         
-        <!-- Стартовий екран -->
-        <div id="start-screen" class="text-center fade-in">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Rankova Studio</h1>
+        <!-- Стартовий екран --><div id="start-screen" class="text-center fade-in">
+            <!-- Логотип Rankova Studio --><img src="https://raw.githubusercontent.com/max-vorozhko/rankova_quiz/ad2fb4e02f0f75e860e111c258c61d32150d0eb5/Rankova%20logo.png" 
+                 alt="Rankova Studio Logo" class="h-16 mx-auto mb-4" 
+                 onerror="this.onerror=null; this.src='https://placehold.co/150x64/FACC15/262626?text=Rankova+Logo';">
+            <!-- Кінець Логотипу --><h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Rankova Studio</h1>
             <p class="text-lg text-gray-600 mb-6">Дізнайся, який інструмент тобі підходить!</p>
             <p class="text-gray-700 mb-8 max-w-md mx-auto">Дай відповідь на кілька запитань про себе, і ми порадимо інструмент, з якого буде цікаво розпочати твій музичний шлях.</p>
             <button id="start-btn" class="btn btn-primary font-bold py-3 px-8 text-lg">Почати тест</button>
         </div>
 
-        <!-- Екран з питаннями -->
-        <div id="question-screen" class="hidden fade-in">
+        <!-- Екран з питаннями --><div id="question-screen" class="hidden fade-in">
             <div class="mb-6">
                 <div id="progress-text" class="text-sm font-semibold text-gray-600 mb-2"></div>
                 <div class="progress-bar-bg h-3 w-full">
@@ -85,17 +104,25 @@
             </div>
             <h2 id="question-text" class="text-2xl font-semibold text-gray-800 mb-8"></h2>
             <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Опції будуть додані динамічно -->
-            </div>
+                <!-- Опції будуть додані динамічно --></div>
         </div>
 
-        <!-- Екран результату -->
-        <div id="result-screen" class="hidden text-center fade-in">
-            <p class="text-lg text-gray-600 mb-4">Твій ідеальний інструмент...</p>
-            <h2 id="result-instrument" class="text-4xl md:text-5xl font-bold text-blue-600 mb-4"></h2>
+        <!-- Екран результату --><div id="result-screen" class="hidden text-center fade-in">
+            <!-- Логотип Rankova Studio на екрані результату --><img src="https://github.com/max-vorozhko/rankova_quiz/blob/ad2fb4e0f75e860e111c258c61d32150d0eb5/Rankova%20logo.png?raw=true" 
+                 alt="Rankova Studio Logo" class="h-12 mx-auto mb-4"
+                 onerror="this.onerror=null; this.src='https://placehold.co/120x50/FACC15/262626?text=Rankova+Logo';">
+            <!-- Кінець Логотипу --><p class="text-lg text-gray-600 mb-4">Твій ідеальний інструмент...</p>
+            <h2 id="result-instrument" class="text-4xl md:text-5xl font-bold mb-4"></h2>
             <div id="instrument-icon" class="text-7xl mb-6"></div>
             <p id="result-description" class="text-gray-700 mb-8 max-w-md mx-auto"></p>
-            <button id="restart-btn" class="btn btn-primary font-bold py-3 px-8 text-lg">Спробувати ще раз</button>
+            
+            <div class="flex flex-col md:flex-row justify-center gap-4 mb-8">
+                <button id="restart-btn" class="btn btn-primary font-bold py-3 px-8 text-lg">Спробувати ще раз</button>
+                <!-- КНОПКА: Записатись на урок - тепер жовта --><a href="https://n813529.alteg.io/" target="_blank" class="btn btn-secondary font-bold py-3 px-8 text-lg flex items-center justify-center">
+                    Записатись на урок
+                </a>
+            </div>
+
              <p class="text-sm text-gray-500 mt-8">
                 Готовий почати? Завітай до <span class="font-bold text-gray-700">Rankova Studio</span> і втілюй мрії в життя!
             </p>
@@ -140,10 +167,8 @@
                 description: "Ти енергійний, рішучий і маєш чудове почуття ритму. Барабани - це серце будь-якої групи. Ти будеш створювати драйв, під який неможливо встояти на місці!"
             },
             vocals: {
-                // ЗМІНЕНО НАЗВУ З "Академічний Вокал" НА "Вокал"
                 name: "Вокал",
                 icon: "🎤",
-                // ОНОВЛЕНО ОПИС, ЩОБ БУВ БІЛЬШ УНІВЕРСАЛЬНИМ
                 description: "Твій інструмент — це ти сам! Ти відкритий, емоційний і любиш розповідати історії. Це найуніверсальніший напрямок, який допоможе тобі розкрити свій голос для будь-якого стилю."
             },
             // НОВІ ІНСТРУМЕНТИ:
@@ -164,10 +189,8 @@
             {
                 question: "Як ти любиш проводити вільний час?",
                 options: [
-                    // Раніше: piano, violin. Тепер: piano, sopilka
                     { text: "Вдома, за книгою чи фільмом", scores: { piano: 2, sopilka: 1 } },
                     { text: "З друзями, на гучній вечірці", scores: { guitar: 2, drums: 2, vocals: 1 } },
-                    // Раніше: piano, saxophone. Тепер: piano, etnovocals
                     { text: "На самоті, але створюючи щось нове", scores: { piano: 2, etnovocals: 1 } },
                     { text: "Активно, в русі, наприклад, у спорті", scores: { drums: 2, guitar: 1 } }
                 ]
@@ -175,10 +198,8 @@
             {
                 question: "Яка музика тобі більше до вподоби?",
                 options: [
-                    // Раніше: piano, violin. Тепер: piano, sopilka
                     { text: "Спокійна, класична або інструментальна", scores: { piano: 2, sopilka: 2 } },
                     { text: "Енергійний рок або поп-музика", scores: { guitar: 2, drums: 2, vocals: 1 } },
-                    // Раніше: saxophone, piano. Тепер: etnovocals, piano
                     { text: "Душевний джаз або блюз", scores: { piano: 1, etnovocals: 1 } },
                     { text: "Сучасні хіти, що грають по радіо", scores: { vocals: 2, guitar: 1 } }
                 ]
@@ -186,22 +207,17 @@
             {
                 question: "У команді ти зазвичай...",
                 options: [
-                    // Раніше: guitar, vocals, violin. Тепер: guitar, vocals, etnovocals
                     { text: "Лідер, що веде всіх за собою", scores: { guitar: 1, vocals: 2, etnovocals: 1 } },
                     { text: "Надійна підтримка, 'клей' для команди", scores: { drums: 2, piano: 1 } },
-                    // Раніше: saxophone, piano. Тепер: sopilka, piano
                     { text: "Креативний генератор ідей", scores: { sopilka: 2, piano: 1 } },
-                    // Раніше: violin. Тепер: sopilka
                     { text: "Спостерігач, що аналізує ситуацію", scores: { sopilka: 1 } }
                 ]
             },
             {
                 question: "Що для тебе важливіше у творчості?",
                 options: [
-                    // Раніше: piano, violin. Тепер: piano, sopilka
                     { text: "Гармонія та краса звуку", scores: { piano: 2, sopilka: 2 } },
                     { text: "Ритм та енергія, що змушує рухатись", scores: { drums: 2 } },
-                    // Раніше: saxophone, vocals. Тепер: etnovocals, vocals
                     { text: "Емоції та самовираження", scores: { etnovocals: 2, vocals: 2 } },
                     { text: "Простота та можливість поділитись з друзями", scores: { guitar: 2 } }
                 ]
@@ -209,11 +225,9 @@
             {
                 question: "Якби ти був персонажем фільму, ти був би...",
                 options: [
-                    // Раніше: piano, violin. Тепер: piano, sopilka
                     { text: "Загадковим генієм", scores: { piano: 2, sopilka: 1 } },
                     { text: "Героєм-бунтарем", scores: { guitar: 2, drums: 1 } },
                     { text: "Душею компанії та веселуном", scores: { vocals: 2, guitar: 1 } },
-                    // Раніше: saxophone. Тепер: etnovocals
                     { text: "Харизматичним детективом", scores: { etnovocals: 2 } }
                 ]
             }
@@ -253,7 +267,7 @@
                 const button = document.createElement('button');
                 button.textContent = option.text;
                 // Додавання адаптивних класів та стилів
-                button.classList.add('btn', 'option-btn', 'w-full', 'text-left', 'p-4', 'font-semibold', 'text-base', 'hover:shadow-lg', 'focus:outline-none', 'focus:ring-2', 'focus:ring-blue-500');
+                button.classList.add('btn', 'option-btn', 'w-full', 'text-left', 'p-4', 'font-semibold', 'text-base', 'hover:shadow-lg', 'focus:outline-none', 'focus:ring-2', 'focus:ring-yellow-500'); /* Колір фокусу */
                 button.onclick = () => selectOption(option.scores);
                 optionsContainer.appendChild(button);
             });
@@ -298,8 +312,7 @@
             const result = instruments[resultKey];
             
             resultInstrument.textContent = result.name;
-            resultInstrument.classList.remove('text-blue-600'); // Видаляємо старий колір, якщо він був 
-            resultInstrument.classList.add('text-blue-700'); // Додаємо новий, трохи темніший
+            // Колір тексту для результату встановлено в CSS
             instrumentIcon.textContent = result.icon;
             resultDescription.textContent = result.description;
 
@@ -313,4 +326,3 @@
     </script>
 </body>
 </html>
-
