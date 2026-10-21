@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="41ebbb7b-39a4-490c-b748-1b4c177747cc" data-domains="max-vorozhko.github.io"></script>
 <title>Який твій інструмент</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Квіз Rankova Studio: дай відповідь на 6 питань і дізнайся, з якого інструмента почати.">
@@ -204,7 +205,7 @@ p { margin: 0; }
       <div class="bars" id="r-bars"></div>
     </div>
     <div class="actions">
-      <a class="btn primary" id="r-book" href="https://n813529.alteg.io/" target="_blank" rel="noopener">Записатись на урок</a>
+      <a class="btn primary" id="r-book" data-umami-event="Запис на урок" data-umami-event-game="quiz" href="https://n813529.alteg.io/" target="_blank" rel="noopener">Записатись на урок</a>
       <div class="two">
         <button class="btn" id="r-share" type="button">Поділитися</button>
         <button class="btn" id="r-again" type="button">Ще раз</button>
@@ -223,6 +224,7 @@ p { margin: 0; }
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
+const track = (name, data) => { try { if (window.umami) window.umami.track(name, data); } catch (e) { /* analytics is optional */ } };
 const BOOKING = 'https://n813529.alteg.io/';
 const PAGE_URL = 'https://max-vorozhko.github.io/rankova_quiz/';
 
@@ -328,7 +330,7 @@ AUDIENCE.forEach(a => {
   b.addEventListener('click', () => { audience = a.id; begin(); });
   $('who').appendChild(b);
 });
-function begin() { answers = []; qi = 0; history.replaceState(null, '', location.pathname + location.search); renderQ(); show('s-q'); }
+function begin() { track('Квіз: старт', { audience }); answers = []; qi = 0; history.replaceState(null, '', location.pathname + location.search); renderQ(); show('s-q'); }
 
 /* ---------- Questions ---------- */
 const steps = $('q-steps');
@@ -395,6 +397,7 @@ function showResult(ranked, shared) {
   const top = ranked[0], second = ranked[1];
   const I = INSTR[top.id];
   current = top.id;
+  if (!shared) track('Квіз: результат', { instrument: top.id, audience });
   $('r-icon').innerHTML = icon(top.id);
   $('r-name').textContent = I.name;
   $('r-match').textContent = top.pct + '% збігу';
@@ -420,6 +423,7 @@ function showResult(ranked, shared) {
   const book = $('r-book');
   book.textContent = 'Записатись на урок ' + I.of;
   book.href = BOOKING + '?utm_source=games&utm_medium=quiz&utm_content=' + top.id;
+  book.setAttribute('data-umami-event-instrument', top.id);
   $('r-toast').textContent = '';
   history.replaceState(null, '', location.pathname + location.search + '#' + top.id);
   show('s-result');
@@ -431,6 +435,7 @@ function shareUrl() {
   return base + '#' + current;
 }
 $('r-share').addEventListener('click', async () => {
+  track('Квіз: поділитися', { instrument: current });
   const url = shareUrl();
   const text = 'Мій інструмент за квізом Rankova Studio: ' + INSTR[current].name + '. А який твій?';
   const toast = $('r-toast');
